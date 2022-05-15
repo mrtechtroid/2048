@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048</title>
+    <link rel = "stylesheet" href = "css.css">
+    <link rel="icon" href="2048_logo.png" type="image/icon type">
+</head>
+<body>
+    <div id="bi">
+        <div id = "title">
+            <span style="color: #776e65;font-size: 80px;font-weight: bold;">2048</span>
+            <span style = "padding: 1px;">Join the tiles, get to <b>2048</b>!</span>
+            <a style="text-decoration: none;color:#776e65;font-weight: bold;padding: 2px;" onclick="howto()">How To Play? Click Me!</a>
+        </div>
+        <div id="ipo">
+            <div id = "scores" style="width: 50vw;display: flex;flex-direction: row;"> 
+                <span class = "iu"><span style = "font-size: 15px;">Score</span><span id = "score" style = "color: white;">1000</span></span>
+                <span class = "iu"><span style = "font-size: 15px;">Best</span><span id = "highscore" style = "color: white;"></span></span>
+                <span class = "iu"><span style = "font-size: 15px;">Moves</span><span id = "moves" style = "color: white;"></span></span>
+            </div>
+            <div id = "play">
+                <button id = "new_game" onclick="newGame()">New Game</button>
+            </div>
+        </div>
+    </div>
+    <div id="player">
+        <!-- <span class = "tile x_1">1</span>
+        <span class = "tile x_2">2</span>
+        <span class = "tile x_3">3</span>
+        <span class = "tile x_4">4</span>
+        <span class = "tile x_5">5</span>
+        <span class = "tile x_6">6</span>
+        <span class = "tile x_7">7</span>
+        <span class = "tile x_8">8</span>
+        <span class = "tile x_9">9</span>
+        <span class = "tile x_10">10</span>
+        <span class = "tile x_11">11</span>
+        <span class = "tile x_12">12</span>
+        <span class = "tile">13</span>
+        <span class = "tile">14</span>
+        <span class = "tile">15</span>
+        <span class = "tile">16</span> -->
+    </div>
+    <span style = "padding: 1px;font-size: 15px;">Made By <b>Mr Techtroid</b></span>
+    <span style = "font-size: 12px;">Open Source: Released Under MIT License</span>
+    <script src="main.js"></script>
+    <div id="msg_popup" class="overlay">
+		<div class="popup">
+			<center><h2 id="msg_popup_txt">You Win!</h2></center>
+			<a class="close" href="#player">&times;</a>
+			<p id="msg_popup_content"></p>
+		</div>
+    </div>
+
+</div>
+</body>
+</html>
