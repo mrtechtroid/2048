@@ -211,3 +211,27 @@ document.addEventListener('keyup', (e) => {
     }
     document.getElementById("score").innerText = score;
 })
+document.addEventListener('swiped-left', function(e) {
+    if (!left()){
+            m()
+        }
+        randomNum()
+});
+document.addEventListener('swiped-right', function(e) {
+    if (!right()){
+            m();
+        }
+        randomNum()
+});
+document.addEventListener('swiped-up', function(e) {
+    if (!up()){
+            m();
+        }
+        randomNum()
+});
+document.addEventListener('swiped-down', function(e) {
+    if (!down()){
+            m();
+        }
+        randomNum()
+});
