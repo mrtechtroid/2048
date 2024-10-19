@@ -3,14 +3,53 @@ var score = 0;
 var i2048 = false
 var highscore;
 var moves = 0;
+var hit2048 = false;
 function noToExp(no,a){
     if (no == 1 || no == 0){return a}
     return noToExp(no/2,a+1)
 }
 function noToCss(no){
     if (no == 2 || no == 4){return "x_1"}
+    else if (no>2048){return "x_11"}
     else {return "x_" + noToExp(no,0)}
-    
+}
+function _isEqual(a,b){
+    for (let i = 0;i<4;i++){
+        for (let j = 0;j<4;j++){
+            if (a[i][j]!=b[i][j]){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+function matchLost(){
+    let BOARD_C = board;
+    let BOARD_L = JSON.parse(JSON.stringify(BOARD_C));
+    let BOARD_R = JSON.parse(JSON.stringify(BOARD_C));
+    let BOARD_U = JSON.parse(JSON.stringify(BOARD_C));
+    let BOARD_D = JSON.parse(JSON.stringify(BOARD_C));
+    for (let i =0;i<4;i++){
+        BOARD_L[i] = move(BOARD_L[i],true)
+    }
+    for (let i =0;i<4;i++){
+        BOARD_R[i] = move(BOARD_R[i].reverse(),true).reverse()
+    }
+    for (let i =0;i<4;i++){
+        j = [BOARD_U[0][i],BOARD_U[1][i],BOARD_U[2][i],BOARD_U[3][i]]
+        k = move(j,true)
+        for (let n = 0;n<4;n++){
+            BOARD_U[n][i] = k[n]
+        }
+    }
+    for (let i =0;i<4;i++){
+        j = [BOARD_D[3][i],BOARD_D[2][i],BOARD_D[1][i],BOARD_D[0][i]]
+        k = move(j,true).reverse()
+        for (let n = 3;n>-1;n--){
+            BOARD_D[n][i] = k[n]
+        }
+    }
+    return _isEqual(BOARD_C,BOARD_L) && _isEqual(BOARD_C,BOARD_R) && _isEqual(BOARD_C,BOARD_U) && _isEqual(BOARD_C,BOARD_D);
 }
 function howto(){
     window.location = "#msg_popup"
@@ -39,7 +78,7 @@ function boardToTile(){
         }
     }
     document.getElementById("score").innerText = score
-    if (i2048){alert("You Win! You Can Now Go On To Get The Highest Score!");i2048=false}
+    if (!hit2048 && i2048){win();hit2048=true;}
     if (highscore<score){highscore = score;localStorage.setItem("highscore",score);document.getElementById("highscore").innerText = highscore}
 }
 function newGame(){
@@ -58,12 +97,14 @@ function newGame(){
 function removeZero(row){
     return row.filter(num => num !=0)
 }
-function move(row){
+function move(row,flag){
     row = removeZero(row)
     for (let i =0;i<row.length;i++){
         if (row[i]==row[i+1]){
             row[i] = row[i]*2
-            score+=row[i]
+            if (!flag){
+                score+=row[i]
+            }
             row[i+1]=  0
         }
     }
@@ -74,18 +115,23 @@ function move(row){
     return row
 }
 function left(){
+    let BOARD_C =  JSON.parse(JSON.stringify(board));
     for (let i =0;i<4;i++){
         board[i] = move(board[i])
     }
     boardToTile()
+    return _isEqual(BOARD_C,board);
 }
 function right(){
+    let BOARD_C =  JSON.parse(JSON.stringify(board));
     for (let i =0;i<4;i++){
         board[i] = move(board[i].reverse()).reverse()
     }
     boardToTile()
+    return _isEqual(BOARD_C,board);
 }
 function up(){
+    let BOARD_C =  JSON.parse(JSON.stringify(board));
     for (let i =0;i<4;i++){
         j = [board[0][i],board[1][i],board[2][i],board[3][i]]
         k = move(j)
@@ -94,8 +140,10 @@ function up(){
         }
     }
     boardToTile()
+    return _isEqual(BOARD_C,board);
 }
 function down(){
+    let BOARD_C =  JSON.parse(JSON.stringify(board));
     for (let i =0;i<4;i++){
         j = [board[3][i],board[2][i],board[1][i],board[0][i]]
         k = move(j).reverse()
@@ -104,7 +152,7 @@ function down(){
         }
     }
     boardToTile()
-    boardToTile()
+    return _isEqual(BOARD_C,board);
 }
 function randomNum(){
     try{
@@ -119,7 +167,10 @@ function randomNum(){
         document.getElementById("t"+coords.x+"-"+coords.y).innerText = 2;
         document.getElementById("t"+coords.x+"-"+coords.y).classList.add("x_1")
     }catch {
-        alert("Possible Lose")
+        // alert("Possible Lose")
+    }
+    if (matchLost()){
+        lose();
     }
 
 }
@@ -134,24 +185,28 @@ function m(){
 }
 document.addEventListener('keyup', (e) => {
     if (e.code == "ArrowLeft") {
-        left();
-        m()
+        if (!left()){
+            m()
+        }
         randomNum()
     }
     else if (e.code == "ArrowRight") {
-        right();
-        m()
+        if (!right()){
+            m();
+        }
         randomNum()
     }
     else if (e.code == "ArrowUp") {
-        up();
-        m()
+        if (!up()){
+            m();
+        }
         randomNum()
 
     }
     else if (e.code == "ArrowDown") {
-        down();
-        m()
+        if (!down()){
+            m();
+        }
         randomNum()
     }
     document.getElementById("score").innerText = score;
